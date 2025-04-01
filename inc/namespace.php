@@ -53,19 +53,18 @@ function init() {
 function check_requirements() : bool {
 	global $wp_version;
 
-	if ( version_compare( PHP_VERSION, '7.1', '<' ) ) {
-		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-			add_action( 'admin_notices', __NAMESPACE__ . '\\outdated_php_version_notice' );
-		}
+	// Pre flight check here
+	if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+		return true;
+	}
 
+	if ( version_compare( PHP_VERSION, '7.1', '<' ) ) {
+		add_action( 'admin_notices', __NAMESPACE__ . '\\outdated_php_version_notice' );
 		return false;
 	}
 
 	if ( version_compare( $wp_version, '5.3.0', '<' ) ) {
-		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-			add_action( 'admin_notices', __NAMESPACE__ . '\\outdated_wp_version_notice' );
-		}
-
+		add_action( 'admin_notices', __NAMESPACE__ . '\\outdated_wp_version_notice' );
 		return false;
 	}
 
